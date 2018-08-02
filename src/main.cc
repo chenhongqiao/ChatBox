@@ -301,6 +301,7 @@ void runout3(void)
 void takepicture(void){
 	int n;
 	cin>>n;
+	int *data=(int*)calloc(n,sizeof(int));
 }
 int main()
 {
