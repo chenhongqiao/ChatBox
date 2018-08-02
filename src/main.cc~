@@ -300,8 +300,7 @@ void runout3(void)
 }
 void takepicture(void){
 	int n;
-	cin>>n;
-	
+}
 int main()
 {
 	worldExpoVol();
