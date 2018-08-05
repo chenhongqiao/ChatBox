@@ -298,11 +298,37 @@ void runout3(void)
 		cout<<result<<endl;
 	}
 }
+int comp3(const &a,const &b)
+{
+	return a<b;
 void takepicture(void){
 	int n;
 	cin>>n;
-	int *data=(int*)calloc(n,sizeof(int));
-	
+	char tmp1[6];
+	int tmp2;
+	int *male=(int*)calloc(n,sizeof(int));
+	int male_n;
+	int female_n;
+	int *female=(int*)calloc(n,sizeof(int));
+	int j=0;k=0;
+	for(int i=0;i<n;i++){
+		cin>>tmp1>>tmp2;
+		if(tmp1[0]=='m'){
+			male[j]=tmp2;
+			j++;
+		}else{
+			female[k]=tmp2;
+			k++;
+		}
+	}
+	sort(male,male+j+1);
+	sort(female,female+k+1,comp3);
+	for(int i=0;i<j;i++){
+		cout<<male[i];
+	}
+	for(int i=0;i<k;i++){
+		cout<<female[i];
+	}
 }
 int main()
 {
