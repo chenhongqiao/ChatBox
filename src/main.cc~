@@ -336,14 +336,23 @@ void comparepicture(void){
 		}
 	}
 	int similar=0;
-	for(int i=0;i<m;i++){
-		for(int j=0;j<n;j++){
-			if(pic1[i][j]==pic2[i][j]){
-				similar++;
+	int similar_b=0;
+	for(int m1=0;m1<n;m1++){
+		for(int m2=0;m2<m;m2++){
+			for(int i=0;i<m;i++){
+				for(int j=0;j<n;j++){
+					if(i+m1<m)
+					if(pic1[i][j]==pic2[i+m1][j+m2]){
+						similar++;
+					}
+				}
 			}
+			if(similar>similar_b)
+				similar_b=similar;
+			similar=0;
 		}
 	}
-	cout<<setprecision(3)<<n*m/(similar+0.0)<<endl;
+	cout<<setprecision(3)<<(similar_b+0.0)/n*m<<endl;
 }
 int main()
 {
