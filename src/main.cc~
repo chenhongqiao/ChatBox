@@ -22,6 +22,7 @@
 #include <string.h>
 #include <algorithm>
 #include <math.h>
+#include <iomanip>
 using namespace std;
 void test1(void)
 {
@@ -226,18 +227,6 @@ void worldExpoVol()
 		}
 	}
 }
-void runout()
-{
-	int m,t;
-	cin>>m>>t;
-	int l=(t/7)*120=(t%7)*17;
-	if(l>=n){
-		cout<<"YES"<<endl;
-	}else{
-		cout<<"NO"<<endl;
-		cout<<l<<endl;
-	}
-}
 void runout2()
 {
 	int m,t;
@@ -298,9 +287,10 @@ void runout3(void)
 		cout<<result<<endl;
 	}
 }
-int comp3(const &a,const &b)
+int comp3(const int &a,const int &b)
 {
 	return a<b;
+}
 void takepicture(void){
 	int n;
 	cin>>n;
@@ -310,14 +300,14 @@ void takepicture(void){
 	int male_n;
 	int female_n;
 	int *female=(int*)calloc(n,sizeof(int));
-	int j=0;k=0;
+	int j=0,k=0;
 	for(int i=0;i<n;i++){
 		cin>>tmp1>>tmp2;
 		if(tmp1[0]=='m'){
 			male[j]=tmp2;
 			j++;
 		}else{
-			female[k]=tmp2;
+			fe male[k]=tmp2;
 			k++;
 		}
 	}
@@ -330,8 +320,33 @@ void takepicture(void){
 		cout<<female[i];
 	}
 }
+void comparepicture(void){
+	int n,m;
+	cin>>n>>m;
+	short pic1[100][100];
+	short pic2[100][100];
+	for(int i=0;i<m;i++){
+		for(int j=0;j<n;j++){
+			cin>>pic1[i][j];
+		}
+	}
+	for(int i=0;i<m;i++){
+		for(int j=0;j<n;j++){
+			cin>>pic2[i][j];
+		}
+	}
+	int similar=0;
+	for(int i=0;i<m;i++){
+		for(int j=0;j<n;j++){
+			if(pic1[i][j]==pic2[i][j]){
+				similar++;
+			}
+		}
+	}
+	cout<<setprecision(3)<<n*m/(similar+0.0)<<endl;
+}
 int main()
 {
-	worldExpoVol();
+	comparepicture();
 	return 0;
 }
