@@ -307,7 +307,7 @@ void takepicture(void){
 			male[j]=tmp2;
 			j++;
 		}else{
-			fe male[k]=tmp2;
+			female[k]=tmp2;
 			k++;
 		}
 	}
@@ -355,8 +355,49 @@ void comparepicture(void){
 	}
 	cout<<setprecision(3)<<(similar_b+0.0)/n*m<<endl;
 }
+void minesweeping(void)
+{
+	int n,m;
+	char mine[100][100];
+	cin>>n>>m;
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			cin>>mine[i][j];
+		}
+	}
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			if(mine[i][j]!='*'){
+				mine[i][j]=0;
+				if(i+1<=n&&mine[i+1][j]=='*')
+					mine[i][j]+=1;
+				if(i+1<=n&&j+1<=m&&mine[i+1][j+1]=='*')
+					mine[i][j]+=1;
+				if(j-1>=0&&mine[i][j-1]=='*')
+					mine[i][j]+=1;
+				if(j-1>=0&&i-1>=0&&mine[j-1][i-1]=='*')
+					mine[i][j]+=1;
+				if(i-1>=0&&mine[i-1][j]=='*')
+					mine[i][j]+=1;
+				if(i-1>=0&&j+1<=m&&mine[i-1][j+1]=='*')
+					mine[i][j]+=1;
+				if(j+1<=m&&mine[i][j+1]=='*')
+					mine[i][j]+=1;
+				if(j-1>=0&&i+1<=m&&mine[i+1][j-1]=='*')
+					mine[i][j]+=1;
+				mine[i][j]+='0';
+			}
+		}
+	}
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			cout<<mine[i][j];
+		}
+		cout<<endl;
+	}
+}
 int main()
 {
-	comparepicture();
+	minesweeping();
 	return 0;
 }
