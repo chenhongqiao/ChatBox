@@ -19,7 +19,7 @@
 
 #include <iostream>
 #include <stdlib.h>
-#include <string.h>
+#include <cstring>
 #include <algorithm>
 #include <math.h>
 #include <iomanip>
@@ -396,7 +396,143 @@ void minesweeping(void)
 		cout<<endl;
 	}
 }
-
+int compare(const int &a,const int &b){
+	return a>b;
+}
+void notalking(void)
+{
+	int m,n,k,l,d;
+	cin>>m>>n>>k>>l>>d;
+	int x[2000];
+	int y[2000];
+	int p[2000];
+	int q[2000];
+	for(int i=0;i<d;i++){
+		cin>>x[i]>>y[i]>>p[i]>>q[i];
+	}
+	int xp;
+	int xl[1000];
+	int yl[1000];
+	for(int i=0;i<1000;i++){
+		xl[i]=0;
+		yl[i]=0;
+	}
+	for(int i=0;i<m;i++){
+		if(x[i]==p[i]-1||x[i]==p[i]+1){
+			xl[x[i]]=x[i];
+		}
+		if(y[i]==q[i]+1||y[i]==q[i]-1){
+			yl[y[i]]=y[i];
+		}
+	}
+	sort(xl,xl+1000+1,compare);
+	sort(yl,yl+1000+1,compare);
+	for(int i=0;i<k;i++){
+		cout<<xl[i]<<" "<<xl[i]+1<<endl;
+	}
+	for(int i=0;i<l;i++){
+		cout<<yl[i]<<" "<<yl[i]+1<<endl;
+	}
+}
+char result_plus[500];
+void times(void)
+{
+	int p,q,r1;
+	cin>>p>>q>>r1;
+	char num1[500];
+	char num2[500];
+	char r[500];
+	sprintf(num1,"%d",p);
+	sprintf(num2,"%d",q);
+	sprintf(r,"%d",r1);
+	for(int i=0;;i++){
+		char result_tmp[500];
+		int numl1 = strlen(num1);
+		int numl2 = strlen(num2);
+		char tmp_move[500];
+		char tmp1[502];
+		int space_out = -1;
+		int i, j, k, p, q;
+		int tmp;
+		int result[500];
+		int n, m, c;
+		int th = INT_MAX-1000;
+		k = 0;
+		for (i = 0; i <= numl2 - 1 + numl1; i++) {
+			result[i] = 0;
+		}
+		for (i = numl2 - 1; i >= 0; i--) {
+			n = num2[i] - '0';
+			for (j = numl1 - 1; j >= 0; j--) {
+				m = num1[j] - '0';
+				c = n * m;
+				k++;
+				if (result[numl2 - 1 - i + numl1 - 1 - j] > th) {
+					p = result[numl2 - 1 - i + numl1 - 1 - j] / i;
+					result[numl2 - 1 - i + numl1 - 1 - j] = result[numl2 - 1 - i + numl1 - 1 - j] % 10 + c;
+					for (k = numl2 - 1 - i + numl1 - 1 - j + 1; ; k++) {
+						if (result[k] + p < th) {
+							result[k] += p;
+							break;
+						}
+						else {
+							q = (result[k] + p) / i;
+							result[k] = (result[k] + p) % i;
+							p = q;
+						}
+					}
+				}
+				else {
+					result[numl2 - 1 - i + numl1 - 1 - j] += c;
+				}
+			}
+		}
+		tmp = result[k] / i;
+		result[k] = result[k] % i;
+		for (i = 1; i <= k; i++) {
+			if (result[i] + p > th) {
+				q = (result[i] + p) / i;
+				result[i] = (result[i] + p) % i;
+				p = q;
+				for (j = i + 1;; j++) {
+					if (result[j] + p < th) {
+						result[j] += p;
+						break;
+					}
+					q = (result[j] + p) / i;
+					result[j] = (result[j] + p) % i;
+					p = q;
+				}
+			}
+			else {
+				result[i] += p;
+				p = result[i] / i;
+				result[i] = result[i] % i;
+			}
+		}
+		result[1] += tmp;
+		if(strcmp(result,r)==1){
+			cout<<i<<endl;
+			break;
+		}
+	}
+}
+void lisaworld(void)
+{
+	int r,c,n;
+	char g[100][100];
+	cin>>r>>c>>n;
+	for(int i=0;i<r;i++){
+		cin>>g[i];
+	}
+	for(int d=0;d<n;d++){
+		for(int i=0;i<r;i++){
+			for(int j=0;j<c;j++){
+				g[i][j]
+			}
+		}
+	}
+	
 int main()
 {
 	minesweeping();
