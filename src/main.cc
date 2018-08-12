@@ -17,6 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 #include <iostream>
 #include <stdlib.h>
 #include <cstring>
@@ -396,8 +397,14 @@ void minesweeping(void)
 		cout<<endl;
 	}
 }
-int compare(const int &a,const int &b){
-	return a>b;
+struct xynum
+{
+	int num;
+	int xy;
+};
+int compare(const xynum &a,const xynum &b)
+{
+	return a.num>b.num;
 }
 void notalking(void)
 {
@@ -411,111 +418,40 @@ void notalking(void)
 		cin>>x[i]>>y[i]>>p[i]>>q[i];
 	}
 	int xp;
-	int xl[1000];
-	int yl[1000];
+	struct xynum xl[1000];
+	struct xynum yl[1000];
 	for(int i=0;i<1000;i++){
-		xl[i]=0;
-		yl[i]=0;
+		xl[i].num=0;
+		xl[i].xy=i;
+		yl[i].num=0;
+		yl[i].xy=i;
 	}
-	for(int i=0;i<m;i++){
-		if(x[i]==p[i]-1||x[i]==p[i]+1){
-			xl[x[i]]=x[i];
+	for(int i=0;i<d;i++){
+		if((x[i]==p[i]-1||x[i]==p[i]+1)&&y[i]==q[i]){
+			if(x[i]==p[i]-1){
+				xl[x[i]].num++;
+			}else{
+				xl[p[i]].num++;
+			}
 		}
-		if(y[i]==q[i]+1||y[i]==q[i]-1){
-			yl[y[i]]=y[i];
+		if((y[i]==q[i]+1||y[i]==q[i]-1)&&x[i]==p[i]){
+			if(y[i]==q[i]-1){
+				yl[y[i]].num++;
+			}else{
+				yl[q[i]].num++;
+			}
 		}
 	}
 	sort(xl,xl+1000+1,compare);
 	sort(yl,yl+1000+1,compare);
 	for(int i=0;i<k;i++){
-		cout<<xl[i]<<" "<<xl[i]+1<<endl;
+		cout<<xl[i].xy<<" ";
 	}
+	cout<<endl;
 	for(int i=0;i<l;i++){
-		cout<<yl[i]<<" "<<yl[i]+1<<endl;
+		cout<<yl[i].xy<<" ";
 	}
-}
-char result_plus[500];
-void times(void)
-{
-	int p,q,r1;
-	cin>>p>>q>>r1;
-	char num1[500];
-	char num2[500];
-	char r[500];
-	sprintf(num1,"%d",p);
-	sprintf(num2,"%d",q);
-	sprintf(r,"%d",r1);
-	for(int i=0;;i++){
-		char result_tmp[500];
-		int numl1 = strlen(num1);
-		int numl2 = strlen(num2);
-		char tmp_move[500];
-		char tmp1[502];
-		int space_out = -1;
-		int i, j, k, p, q;
-		int tmp;
-		int result[500];
-		int n, m, c;
-		int th = INT_MAX-1000;
-		k = 0;
-		for (i = 0; i <= numl2 - 1 + numl1; i++) {
-			result[i] = 0;
-		}
-		for (i = numl2 - 1; i >= 0; i--) {
-			n = num2[i] - '0';
-			for (j = numl1 - 1; j >= 0; j--) {
-				m = num1[j] - '0';
-				c = n * m;
-				k++;
-				if (result[numl2 - 1 - i + numl1 - 1 - j] > th) {
-					p = result[numl2 - 1 - i + numl1 - 1 - j] / i;
-					result[numl2 - 1 - i + numl1 - 1 - j] = result[numl2 - 1 - i + numl1 - 1 - j] % 10 + c;
-					for (k = numl2 - 1 - i + numl1 - 1 - j + 1; ; k++) {
-						if (result[k] + p < th) {
-							result[k] += p;
-							break;
-						}
-						else {
-							q = (result[k] + p) / i;
-							result[k] = (result[k] + p) % i;
-							p = q;
-						}
-					}
-				}
-				else {
-					result[numl2 - 1 - i + numl1 - 1 - j] += c;
-				}
-			}
-		}
-		tmp = result[k] / i;
-		result[k] = result[k] % i;
-		for (i = 1; i <= k; i++) {
-			if (result[i] + p > th) {
-				q = (result[i] + p) / i;
-				result[i] = (result[i] + p) % i;
-				p = q;
-				for (j = i + 1;; j++) {
-					if (result[j] + p < th) {
-						result[j] += p;
-						break;
-					}
-					q = (result[j] + p) / i;
-					result[j] = (result[j] + p) % i;
-					p = q;
-				}
-			}
-			else {
-				result[i] += p;
-				p = result[i] / i;
-				result[i] = result[i] % i;
-			}
-		}
-		result[1] += tmp;
-		if(strcmp(result,r)==1){
-			cout<<i<<endl;
-			break;
-		}
-	}
+	cout<<endl;
 }
 void lisaworld(void)
 {
@@ -532,9 +468,62 @@ void lisaworld(void)
 			}
 		}
 	}
-	
-int main()
+}
+void monkeyking(void)
 {
-	minesweeping();
+	int n,m;
+	cin>>n>>m;
+	int *monkey=(int*)calloc(n+1,sizeof(int));
+	memset(monkey,1,sizeof(monkey));
+	int mout=0;
+	for(int i=1;mout<n;i+=m){
+		if(monkey[i%n]==1){
+			monkey[i%n]=0;
+			mout++;
+		}
+		
+	}
+	for(int i=1;i<=n;i++){
+		if(monkey[i]==1){
+			cout<<i<<endl;
+			break;
+		}
+	}
+}
+void turnpicture(void)
+{
+	int n,m;
+	cin>>n>>m;
+	int d[100][100];
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			cin>>d[j][n-i-1];
+		}
+	}
+	for(int i=0;i<m;i++){
+		for(int j=0;j<n;j++){
+			cout<<d[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+}
+void test5_30(void)
+{
+	int a;
+	cin>>a;
+	int result=1;
+	for(int i=2;a!=1;i++){
+		if(a%i==0){
+			result*=i;
+		}
+		while(a%i==0){
+			a/=i;
+		}
+	}
+	cout<<result<<endl;
+}
+int main()
+{ 
+	turnpicture(); 
 	return 0;
 }
