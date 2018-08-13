@@ -2,20 +2,20 @@
 Maximized=1
 Geometry=1920x1022+0+28
 
-[File Loader]
-Files=../../src/main.cc#436
-
-[Document Manager]
-bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
-
 [Execution]
 Program uri=../../Debug/src/noip
 Run in terminal=2
 Working directories=../../.
 
+[File Loader]
+Files=../../src/main.cc#21
+
+[Document Manager]
+bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
+
 [Project Manager]
 Shortcut=NOIP//src//noip
-Expand=noip%%%NOIP%%%NOIP//src%%%NOIP//src//noip
+Expand=NOIP%%%NOIP//src%%%NOIP//src//noip
 
 [Build]
 Configuration list=1:Default:%%%1:Debug:Debug%%%1:Profiling:Profiling%%%1:Optimized:Optimized%%%1:MinGW32:MinGW32

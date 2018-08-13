@@ -521,9 +521,110 @@ void test5_30(void)
 		}
 	}
 	cout<<result<<endl;
+	
+}
+void interceptor_missile(void)
+{
+	int m[100000];
+	int i=0;
+	while(cin>>m[i++])continue;
+	//cout<<"finish input"<<endl;
+	int num=i-1;
+	int dep[100000];
+	for(i=0;i<100000;i++)
+		dep[i]=1;
+	for(i=0;i<num;i++){
+		cout<<"Try intercepted missle "<<m[i]<<" "<<i<<endl;
+		for(int j=i;j>=0;j--){
+			if(m[i]<=m[j]&&i!=j){
+				if(dep[j]+1>dep[i])
+					dep[i]=dep[j]+1;
+				cout<<"Missle will be put after "<<m[j]<<" "<<dep[j]<<" result is "<<dep[i]<<endl;
+			}
+		}
+	}
+	int result1=0;
+	for(i=0;i<num;i++){
+		if(dep[i]>result1)
+			result1=dep[i];
+	}
+	cout<<endl<<result1<<endl;
+	
+	int inted=0;
+	int sysneed=0;
+	while(inted<num){
+		//cout<<"System needed ="<<sysneed<<endl;
+		sysneed++;
+		int last=0;
+		while(1){
+			int tmptop=0;
+			int j;
+			for(j=last;j<num;j++){
+				if(m[j]>tmptop){
+					tmptop=m[j];
+					last=j;
+				}
+			}
+			if(m[last]==-1){
+				break;
+			}else{
+				m[last]=-1;
+				//cout<<"Intercepted missle "<<last<<endl;
+				inted++;
+			}
+		}
+	}
+	cout<<sysneed<<endl;
+}
+int m[401],top;
+int judge(void)
+{
+    for (int i=0;i<top/2;i++){
+		if (m[i]!=m[top-i-1])
+            return 0;
+	}
+    return 1;
+}
+int tractsnumber(void)
+{
+	int n;
+	char s[101];
+	cin>>n>>s;
+	top=strlen(s);
+	for (int i=0;i<top;i++){
+		if(s[i]>='0'&&s[i]<='9')
+			m[top-i-1]=s[i]-'0';
+		else
+			m[top-i-1]=s[i]-'A'+10;
+	}
+	int step;
+	for(step=0;;step++){
+		if (step>30){
+			cout<<"Impossible!"<<endl;
+            return 0;
+		}
+		int tmp[101];
+		for(int i=0;i<top;i++)
+			tmp[i]=m[i];
+        for (int i=0;i<top;i++){
+			m[i]+=tmp[top-i-1];
+		}
+        for (int i=0;i<top;i++){
+            if (m[i]>=n){
+                m[i+1]+=1;
+				m[i]%=n;
+				if(i==top-1)
+					top++;
+			}
+		}
+		if(judge()==1)
+			break;
+    }
+    cout<<"STEP="<<step+1<<endl;
+    return 0;
 }
 int main()
-{ 
-	turnpicture(); 
+{
+	interceptor_missile(); 
 	return 0;
 }
