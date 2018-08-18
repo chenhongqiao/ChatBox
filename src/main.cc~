@@ -670,9 +670,36 @@ int tractsnumber(void)
     cout<<"STEP="<<step+1<<endl;
     return 0;
 }
+struct missle2
+{
+	int x;
+	int y;
+};
 void interceptor_missile2(void)
 {
 	int x1,y1,x2,y2;
+	cin>>x1>>y1>>x2>>y2;
+	int n;
+	cin>>n;
+	struct missle2 m[100000];
+	for(int i=0;i<n;i++){
+		cin>>m[i].x>>m[i].y;
+	}
+	int l1=0,l2=0;
+	int ml1,ml2;
+	int tmp1,tmp2;
+	for(int i=0;i<n;i++){
+		tmp1=(m[i].x-x1)*(m[i].x-x1)+(m[i].y-y1)*(m[i].y-y1);
+		tmp2=(m[i].x-x2)*(m[i].x-x2)+(m[i].y-y2)*(m[i].y-y2);
+		if(tmp1>ml1&&tmp2>ml2){
+			if(ml1-tmp1>=ml2-tmp2)
+				ml1=tmp1;
+			else
+				ml2=tmp2;
+		}
+	}
+	cout<<ml1*ml1+ml2*ml2<<endl;
+	return 0;
 }
 int main()
 {
