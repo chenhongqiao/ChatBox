@@ -526,7 +526,8 @@ void test5_30(void)
 struct missle
 {
 	int dep;
-	int num;
+	int height;
+	int next;
 };
 int compare2(const missle &a,const missle &b)
 {
@@ -536,31 +537,66 @@ void interceptor_missile(void)
 {
 	struct missle m[100000];
 	int m1[100000];
-	int k=0;
+	m[0].next=1;
 	int i=0;
-	while(cin>>m1[i++])continue;
+	while(cin>>m1[i++]);
 	//cout<<"finish input"<<endl;
 	int num=i-1;
-	for(i=0;i<100000;i++){
-		m[i].num=500001;
-		m[i].dep=0;
-	}
+	int head=-1;
 	for(i=0;i<num;i++){
-		for(int j=0;j<k;j++){
-			cout<<m1[i]<<" "<<m[j].num<<endl;
-			if(m1[i]<=m[j].num){
-				cout<<"Intercepted missle follow"<<m[j].num<<"Length= "<<m[j].dep+1<<endl;
-				m[k].dep=m[j].dep+1;
-				m[k].num=m1[i];
-				k++;
-				for(int tmp=0;tmp<k;tmp++){
-					if(m[j].dep+1>=m[k].dep){
-						m[k].dep
-				break;
-			}
+		m[i].height=m1[i];
+
+		int cur=head;
+		while(cur!=-1 && m[i].height>m[cur].height) cur=m[cur].next;
+		if (cur==-1) {
+			m[i].dep=1;
+		} else {
+			m[i].dep=m[cur].dep+1;
 		}
-	}
-	cout<<endl<<m[0].dep<<endl;
+		cur=head;
+		int prev=-1;
+		while(cur!=-1 && m[i].dep<m[cur].dep) {
+			prev=cur;
+			cur=m[cur].next;
+		}
+		if(prev!=-1){
+			m[i].next=m[prev].next;
+			m[prev].next=i;
+		}else{
+			m[i].next=head;
+			head=i;
+		}
+	}	
+		
+		
+	/*		if (m1[i]<=m[cur].height)
+		if(i==0){
+			m[1].height=m1[0];
+			m[1].dep=1;
+		}
+		int j=0;
+		while(1){
+			int tmpdep=0;
+			j=m[j].next;
+			if(m1[i]<m[j].height){
+				tmpdep=m[j].dep+1;
+				cout<<m1[i]<<" can follow "<<m[j].height<<" Dep= "<<tmpdep<<endl;
+				int n=0;
+				while(1){
+					n=m[n].next;
+					if(m[n].dep<=tmpdep){
+						m[n].next=k;
+						m[k].next=m[n].next;
+						m[k].dep=tmpdep;
+						k++;
+						break;
+					}
+				}
+			}
+			break;
+		}
+	}*/
+	cout<<endl<<m[head].dep<<endl;
 	int inted=0;
 	int sysneed=0;
 	while(inted<num){
@@ -633,6 +669,10 @@ int tractsnumber(void)
     }
     cout<<"STEP="<<step+1<<endl;
     return 0;
+}
+void interceptor_missile2(void)
+{
+	int x1,y1,x2,y2;
 }
 int main()
 {
