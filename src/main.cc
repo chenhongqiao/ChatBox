@@ -17,691 +17,732 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+void readmessage2(char name[64],char openname[64])
+{
+	int gettext1;
+	char messagename1[1000][64];
+	char to1[1000][64];
+	char text1[5000][200];
+	char end[]="\0";
+	FILE *file;
+	printf("刷新\n");
+	if((file = fopen("messagedata.dat","r")) == NULL){
+			printf("505 Notfound ErrorCode:721\n");
+	}else{
+		for(gettext1=0;gettext1<=10000;gettext1++){
+			fscanf(file,"%s",messagename1[gettext1]);
+			//printf("messagename1 %s ",messagename1[gettext1]);
+			fscanf(file,"%s",to1[gettext1]);
+			//printf("to1 %s\n",to1[gettext1]);
+			fscanf(file,"%s",text1[gettext1]);
+			if (strcmp(to1[gettext1], name) == 0 && strcmp(messagename1[gettext1], openname) == 0 || strcmp(to1[gettext1], openname) == 0 && strcmp(messagename1[gettext1], name) == 0){
+				printf("%s",messagename1[gettext1]);
+				printf("%s\n",text1[gettext1]);
+			}
+			if(strcmp(to1[gettext1],end) == 0){
+				printf("读取信息完毕\n");
+				break;
+			}	
+		}
+		fclose(file);
+	}
+}
+void public2()
+{
+	int gettext1;
+	char messagename1[1000][64];
+	char text1[1000][200];
+	char end[]="\0";
+	FILE *file;
+	printf("刷新\n");
+	if((file = fopen("public.dat","r")) == NULL){
+			printf("505 Notfound ErrorCode:722\n");
+	}else{
+		for(gettext1=0;gettext1<=10000;gettext1++){
+			fscanf(file,"%s",messagename1[gettext1]);
+			//printf("messagename1 %s ",messagename1[gettext1]);
+			//printf("to1 %s\n",to1[gettext1]);
+			fscanf(file,"%s",text1[gettext1]);
+			if(strcmp(text1[gettext1],end) == 0){
+				printf("读取信息完毕\n");
+				break;
+			}	
+			printf("%s",messagename1[gettext1]);
+			printf("%s\n",text1[gettext1]);
+			
+		}
+		fclose(file);
+	}
+}
+void cleandata(char name[64])
+{
+	char text[1000][200];
+	char allname[500][64];
+	int signup=0; //判断是否要写入昵称
+	char nolook[1000][64]; //这条日记不让谁看
+	char dairyname[1000][64];
+	int chose=0;
+	int go;
+	int gettext;
+	int ok;
+	char code[500][64];
+	char code1[64];
+	int in;
+	int dowhich=0;
+	int dowhat=0;
+	int deleted[1500];
+	char end[]="\0";
+	time_t	t; 
+	FILE *file;
+	FILE *user;
 
-#include <iostream>
-#include <stdlib.h>
-#include <cstring>
-#include <algorithm>
-#include <math.h>
-#include <iomanip>
-using namespace std;
-void test1(void)
-{
-	int n;
-	cin>>n;
-	int t;
-	int a=0;
-	for(int i=0;i*50<=n;i++){
-		for(int j=0;j*20<=n;j++){ 
-			for(int k=0;k*10<=n;k++){
-				t=50*i+20*j+10*k;
-				if(t==n){
-					a++;
-				}
-			}
-		}
-	}
-	cout<<a<<endl;
-}
-void test2()
-{
-	int n;
-	cin>>n;
-	do{
-		int y;
-		y=n;
-		n=n/2;
-		y=y-n*2;
-		cout<<"商"<<n<<","<<"余"<<y<<endl;
-		if(n==0){
-			break;
-		}
-	}while(1);
+	struct tm  *local;
 	
-}
-void test3()
-{
-	int d[25];
-	int n[15];
-	int i=0;
-	int t=0;
-	memset(n,0,sizeof(n));
-	for(int i=0;i<25;i++){
-		cin>>d[i];
-		n[d[i]]+=1;
-	}
-	for(int i=1;i<=13;i++){
-		if(n[i]!=2){
-			cout<<i<<endl;
-			break;
+	if((file = fopen("journal.dat","r")) == NULL){
+			printf("505 Notfound ErrorCode:601\n");
 		}
+	else{	
+		for(gettext=0;gettext<=1500;gettext++){
+			ok=0;
+			fscanf(file,"%s",nolook[gettext]);
+			fscanf(file,"%s",dairyname[gettext]);
+			fscanf(file,"%s",text[gettext]);
+			if(strcmp(text[gettext], end) == 0){
+				printf("——没有更多日志——\n");
+				go=gettext;
+				break;
+			}
+				printf("%s",dairyname[gettext]);
+				printf("%s ",text[gettext]);
+				printf("编号%d\n",gettext);
+		}
+			do{
+				printf("请选择要管理的日志（输入）编号 1703-保存并退出 1704-不保存并退出");
+				scanf("%d",&dowhich);
+				if(dowhich==1703){
+					go=1;
+					break;
+				}else if(dowhich==1704){
+					go=2;
+					break;
+				}
+				printf("请选择要干什么 1-更改该日志 2-删除该日志 3-放弃更改并退出");
+				scanf("%d",&dowhat);
+				if(dowhat==1){
+					printf("更改成什么？");
+					scanf("%s",text[dowhich]);
+				}else if(dowhat==2){
+					deleted[dowhich] = 1;
+				}else if(dowhat==3){
+					break;
+				}
+			}while(1);
+			fclose(file);
 	}
-}
-void test4()
-{
-	int n;
-	cin>>n;
-	int r=1;
-	for(int i=1;i<=n;i++){
-		r=r*2;
-	}
-	cout<<r<<endl;
-}
-void test5()
-{
-	int n,m,k,x;  
-	cin>>n>>m>>k>>x;
-	int last=m;  
-	for(int i=0;i<k;i++){
-		last=(last*10)%n;
-	}
-	last=(last+x)%n;
-	cout<<last<<endl;
-}
-int d[10];
-int total=0;
-void test6_1(int dep,const int p,int last)
-{
-	int i=0;
-	if(dep<8){
-		while(i<=9){
-			int used=0;
-			for(int j=i;j>=0;j++){
-				if(i==d[j]){
-					used=1;
+	if(go==1){
+		if((file = fopen("journal.dat","w")) == NULL){
+				printf("505 Notfound ErrorCode:602\n");
+			}
+		else{	
+			for(gettext=0;gettext<go;gettext++){
+				time(&t);
+				local = localtime(&t);
+				if(deleted[gettext]!=1){
+					fprintf(file,"%s ",nolook[gettext]);
+					fprintf(file,"%s ",dairyname[gettext]);
+					fprintf(file,"%s ",text[gettext]);
+					fprintf(file,"7\n");
+					printf("更改成功，更改后界面：\n");
+		       			printf("%s",dairyname[gettext]);
+					printf("%s ",text[gettext]);
+					printf("编号%d\n",gettext);
 				}
 			}
-			if(used!=1){
-				d[dep]=i;
-				last=i;
-			}
-			test6_1(dep+1,p,last);
-			i++;
-		}
-	}else{
-		if(d[0]<d[6]<d[8] && d[1]<d[3] && d[6]<d[7] && d[2]<d[4] && d[0]+d[1]+d[3]+d[6]==d[6]+d[7]+d[8]==d[8]+d[4]+d[2]+d[0]==p){
-			total++;
-		}
-		return;
-	}
-}
-void test6()
-{
-	int p;
-	cin>>p;
-	test6_1(0,p,-1);
-	cout<<total<<endl;
-}	
-void test7()
-{
-	int n;
-	cin>>n;
-	int* d;
-	d=(int*)calloc(n+1,sizeof(int));
-	for(int i=0;i<n;i++){
-		cin>>d[i];
-	}
-	int l=1999999999;
-	int sub=-1;
-	for(int i=0;i<n;i++){
-		if(d[i]<l){
-			l=d[i];
-			sub=i;
-		}
-	}
-	int* tmp;
-	tmp=(int*)calloc(n+1,sizeof(int));
-	for(int i=0;i<n;i++){
-		tmp[i+1]=d[i];
-	}
-	tmp[0]=l;
-	for(int i=0;i<n;i++){
-		if(i!=sub){
-			cout<<d[i]<<endl;
+				fclose(file);
 		}
 	}
 }
-void test8()
+
+void writemessage(char name[64])
 {
-	int sub=1;
-	int j=0;
-	int h[10]={0};
-	for(int i=0;i<1000;i++){
-		sub=(sub+j)%10;
-		h[sub]=1;
-		j++;
-	}
-	for(int i=1;i<=10;i++){
-		if(h[i]!=1){
-			cout<<i<<endl;
-			break;
+	char text[200];
+	char to[64]; 
+	int gettext;
+	int ok;
+	int code[500];
+	int code1;
+	int in;
+	time_t	t; 
+	FILE *file;
+	FILE *user;
+
+	struct tm  *local;
+	
+	time(&t);
+	local = localtime(&t);
+	
+	printf("发给：");
+	scanf("%s",to);
+	printf("内容(200字以内)");
+	scanf("%s",text);
+	
+
+		if((file = fopen("messagedata.dat","a+")) == NULL){
+			printf("505 Notfound ErrorCode:701\n");
 		}
-	}
-}
-void test9()
-{
-	int d[53];
-	memset(d,1,sizeof(int));
-	for(int i=2;i<=52;i++){
-		for(int j=i;j<=52;j+=i){
-			d[j]=-d[j];
+		else{	
+			
+			fprintf(file,"%s ",name );
+			fprintf(file,"%s ",to );			
+			fprintf(file,"%d年%d月%d日%d时%d分%d秒",local->tm_year + 1900, local->tm_mon + 1, local->tm_mday, local->tm_hour, local->tm_min, local->tm_sec);		
+			fprintf(file,"“%s”\n",text);
+			printf("已成功给%s发送邮件\n",to);
+			fclose(file);
 		}
-	}
-	int t=0;
-	for(int i=1;i<=52;i++){
-		if(d[i]==1){
-			total++;
-			cout<<d[i]<<endl;
-		}
-	}
 }
-struct volunteer
+
+void readmessage(char name[64])
 {
-	int id;
-	int score;
-};
-int comp(const volunteer &a,const volunteer &b)
-{
-    return a.score>b.score;
-}
-void worldExpoVol()
-{
-	int n,m;
-	cin>>n>>m;
-	struct volunteer *d;
-	d=(struct volunteer*)calloc(n+1,sizeof(struct volunteer));
-	for(int i=0;i<n;i++){
-		cin>>d[i].id>>d[i].score;
-	}
-	sort(d,d+n+1,comp);
-	int ls=d[(int)(floor(m*1.5))].score;
+	char text[1000][200];
+	char text1[1000][200];
+	char text2[200];
+	char allname[1000][64];
+	char to[1000][64]; 
+	char to1[1000][64]; 
+	char messagename[1000][64];
+	char messagename1[1000][64];
+	char username[1000][64];
+	char openname[64];
+	char exit[64]="//fullexit";
+	char end[]="\0";
+	int chose=0;
+	int go=0;
+	int gettext=0;
+	int gettext1=0;
+	int ok=0;
+	int go2=0;
+	int code[500];
+	int code1=0;
 	int in=0;
-	for(int i=0;i<n;i++){
-		if(d[i].score>=ls){
-			in++;
-		}
+	int sure=0;
+	char new[]="//new";
+	char ref[]="//refresh";
+	time_t	t; 
+	FILE *file;
+	FILE *user;
+	struct tm  *local;
+	
+	
+	if((file = fopen("messagedata.dat","r")) == NULL){
+		printf("505 Notfound ErrorCode:702\n");
 	}
-	cout<<ls<<" "<<in<<endl;
-	for(int i=0;i<n;i++){
-		if(d[i].score>=ls){
-			cout<<d[i].id<<" "<<d[i].score<<endl;
-		}
-	}
-}
-void runout2()
-{
-	int m,t;
-	cin>>m>>t;
-	int p=0;
-	const int m1=m;
-	for(int i=0;t>=0;i++){
-		int tmp=0;
-		if(t<7){
-			m-=17;
-			t+=1;
-		}
-		else if(m<=120){
-			m-=17;
-			t=1;
-		}else{
-			if(p<10){
-				//wait utill power full
-				tmp+=floor(t/4);
-				t-=tmp;
-				p+=tmp;
+	else{	
+		for(gettext=0;gettext<=1000;gettext++){
+			ok=0;
+			fscanf(file,"%s",messagename[gettext]);
+			fscanf(file,"%s",to[gettext]);
+			fscanf(file,"%s",text[gettext]);
+			if(strcmp(to[gettext1], end) == 0){
+				printf("读取信息完毕\n");
+				break;
 			}
-			if(p>=10){
-				m-=60;
-				t-=10;
-			}
-		}
-	}
-	if(m<m1){
-		cout<<"NO"<<endl;
-		cout<<m1-m<<endl;
-	}else{
-		cout<<"YES"<<endl;
-	}
-}
-int runout3_1(int m,int t,int p)
-{
-	if(m>0&&t>0){
-		runout3_1(m-17,t-1,p);
-		runout3_1(m,t-1,p+4);
-		runout3_1(m-=60,t-1,p-10);
-	}else if(m<=0){
-		return -1;
-	}else if(t<=0){
-		return m;
-	}
-	return -2;
-}
-void runout3(void)
-{
-	int m,t;
-	cin>>m>>t;
-	int result=runout3_1(m,t,0);
-	if(result==-1){
-		cout<<"YES"<<endl;
-	}else{
-		cout<<"NO"<<endl;
-		cout<<result<<endl;
-	}
-}
-int comp3(const int &a,const int &b)
-{
-	return a<b;
-}
-void takepicture(void){
-	int n;
-	cin>>n;
-	char tmp1[6];
-	int tmp2;
-	int *male=(int*)calloc(n,sizeof(int));
-	int male_n;
-	int female_n;
-	int *female=(int*)calloc(n,sizeof(int));
-	int j=0,k=0;
-	for(int i=0;i<n;i++){
-		cin>>tmp1>>tmp2;
-		if(tmp1[0]=='m'){
-			male[j]=tmp2;
-			j++;
-		}else{
-			female[k]=tmp2;
-			k++;
-		}
-	}
-	sort(male,male+j+1);
-	sort(female,female+k+1,comp3);
-	for(int i=0;i<j;i++){
-		cout<<male[i];
-	}
-	for(int i=0;i<k;i++){
-		cout<<female[i];
-	}
-}
-void comparepicture(void){
-	int n,m;
-	cin>>n>>m;
-	short pic1[100][100];
-	short pic2[100][100];
-	for(int i=0;i<m;i++){
-		for(int j=0;j<n;j++){
-			cin>>pic1[i][j];
-		}
-	}
-	for(int i=0;i<m;i++){
-		for(int j=0;j<n;j++){
-			cin>>pic2[i][j];
-		}
-	}
-	int similar=0;
-	int similar_b=0;
-	for(int m1=0;m1<n;m1++){
-		for(int m2=0;m2<m;m2++){
-			for(int i=0;i<m;i++){
-				for(int j=0;j<n;j++){
-					if(i+m1<m&&j+m2<n){
-						if(pic1[i][j]==pic2[i+m1][j+m2]){
-							similar++;
-						}
-					}
-				}
-			}
-			if(similar>similar_b)
-				similar_b=similar;
-			similar=0;
-		}
-	}
-	cout<<setprecision(3)<<(similar_b+0.0)/n*m<<endl;
-}
-void minesweeping(void)
-{
-	int n,m;
-	char mine[100][100];
-	cin>>n>>m;
-	for(int i=0;i<n;i++){
-		for(int j=0;j<m;j++){
-			cin>>mine[i][j];
-		}
-	}
-	for(int i=0;i<n;i++){
-		for(int j=0;j<m;j++){
-			if(mine[i][j]!='*'){
-				mine[i][j]=0;
-				if(i+1<=n&&mine[i+1][j]=='*')
-					mine[i][j]+=1;
-				if(i+1<=n&&j+1<=m&&mine[i+1][j+1]=='*')
-					mine[i][j]+=1;
-				if(j-1>=0&&mine[i][j-1]=='*')
-					mine[i][j]+=1;
-				if(j-1>=0&&i-1>=0&&mine[j-1][i-1]=='*')
-					mine[i][j]+=1;
-				if(i-1>=0&&mine[i-1][j]=='*')
-					mine[i][j]+=1;
-				if(i-1>=0&&j+1<=m&&mine[i-1][j+1]=='*')
-					mine[i][j]+=1;
-				if(j+1<=m&&mine[i][j+1]=='*')
-					mine[i][j]+=1;
-				if(j-1>=0&&i+1<=m&&mine[i+1][j-1]=='*')
-					mine[i][j]+=1;
-				mine[i][j]+='0';
-			}
-		}
-	}
-	for(int i=0;i<n;i++){
-		for(int j=0;j<m;j++){
-			cout<<mine[i][j];
-		}
-		cout<<endl;
-	}
-}
-struct xynum
-{
-	int num;
-	int xy;
-};
-int compare(const xynum &a,const xynum &b)
-{
-	return a.num>b.num;
-}
-void notalking(void)
-{
-	int m,n,k,l,d;
-	cin>>m>>n>>k>>l>>d;
-	int x[2000];
-	int y[2000];
-	int p[2000];
-	int q[2000];
-	for(int i=0;i<d;i++){
-		cin>>x[i]>>y[i]>>p[i]>>q[i];
-	}
-	int xp;
-	struct xynum xl[1000];
-	struct xynum yl[1000];
-	for(int i=0;i<1000;i++){
-		xl[i].num=0;
-		xl[i].xy=i;
-		yl[i].num=0;
-		yl[i].xy=i;
-	}
-	for(int i=0;i<d;i++){
-		if((x[i]==p[i]-1||x[i]==p[i]+1)&&y[i]==q[i]){
-			if(x[i]==p[i]-1){
-				xl[x[i]].num++;
-			}else{
-				xl[p[i]].num++;
-			}
-		}
-		if((y[i]==q[i]+1||y[i]==q[i]-1)&&x[i]==p[i]){
-			if(y[i]==q[i]-1){
-				yl[y[i]].num++;
-			}else{
-				yl[q[i]].num++;
-			}
-		}
-	}
-	sort(xl,xl+1000+1,compare);
-	sort(yl,yl+1000+1,compare);
-	for(int i=0;i<k;i++){
-		cout<<xl[i].xy<<" ";
-	}
-	cout<<endl;
-	for(int i=0;i<l;i++){
-		cout<<yl[i].xy<<" ";
-	}
-	cout<<endl;
-}
-void lisaworld(void)
-{
-	int r,c,n;
-	char g[100][100];
-	cin>>r>>c>>n;
-	for(int i=0;i<r;i++){
-		cin>>g[i];
-	}
-	for(int d=0;d<n;d++){
-		for(int i=0;i<r;i++){
-			for(int j=0;j<c;j++){
-				g[i][j];
-			}
-		}
-	}
-}
-void monkeyking(void)
-{
-	int n,m;
-	cin>>n>>m;
-	int *monkey=(int*)calloc(n+1,sizeof(int));
-	memset(monkey,1,sizeof(monkey));
-	int mout=0;
-	for(int i=1;mout<n;i+=m){
-		if(monkey[i%n]==1){
-			monkey[i%n]=0;
-			mout++;
 		}
 		
+		fclose(file);
 	}
-	for(int i=1;i<=n;i++){
-		if(monkey[i]==1){
-			cout<<i<<endl;
-			break;
-		}
-	}
-}
-void turnpicture(void)
-{
-	int n,m;
-	cin>>n>>m;
-	int d[100][100];
-	for(int i=0;i<n;i++){
-		for(int j=0;j<m;j++){
-			cin>>d[j][n-i-1];
-		}
-	}
-	for(int i=0;i<m;i++){
-		for(int j=0;j<n;j++){
-			cout<<d[i][j]<<" ";
-		}
-		cout<<endl;
-	}
-}
-void test5_30(void)
-{
-	int a;
-	cin>>a;
-	int result=1;
-	for(int i=2;a!=1;i++){
-		if(a%i==0){
-			result*=i;
-		}
-		while(a%i==0){
-			a/=i;
-		}
-	}
-	cout<<result<<endl;
-	
-}
-struct missle
-{
-	int dep;
-	int height;
-	int next;
-};
-int compare2(const missle &a,const missle &b)
-{
-	return a.dep>b.dep;
-}
-void interceptor_missile(void)
-{
-	struct missle m[100000];
-	int m1[100000];
-	m[0].next=1;
-	int i=0;
-	while(cin>>m1[i++]);
-	//cout<<"finish input"<<endl;
-	int num=i-1;
-	int head=-1;
-	for(i=0;i<num;i++){
-		m[i].height=m1[i];
-
-		int cur=head;
-		while(cur!=-1 && m[i].height>m[cur].height) cur=m[cur].next;
-		if (cur==-1) {
-			m[i].dep=1;
-		} else {
-			m[i].dep=m[cur].dep+1;
-		}
-		cur=head;
-		int prev=-1;
-		while(cur!=-1 && m[i].dep<m[cur].dep) {
-			prev=cur;
-			cur=m[cur].next;
-		}
-		if(prev!=-1){
-			m[i].next=m[prev].next;
-			m[prev].next=i;
-		}else{
-			m[i].next=head;
-			head=i;
+	ok=0;
+	for(go=0;go<=100;go++){
+		if(strcmp(to[go], name) == 0){
+		sure=0;
+			for(in=0;in<=1000;in++){
+				
+				if(*username[in]=='\0' && *messagename[go]=='\0'){
+					break;
+				}
+				if(strcmp(username[in], messagename[go]) == 0){
+					ok++;
+					
+					sure=2;
+					break;
+				}				
+				
+			}
+			if(sure==0){
+				ok++;
+				stpcpy(username[ok], messagename[go]);
+				gettext1=gettext;
+			}	
 		}
 	}	
-		
-		
-	/*		if (m1[i]<=m[cur].height)
-		if(i==0){
-			m[1].height=m1[0];
-			m[1].dep=1;
+	for(go=0;go<=gettext;go++){
+		go2++;			
+		for(gettext1=gettext;gettext1>=0;gettext1--){
+			
+			if(strcmp(name, to[gettext1-1])==0 && strcmp(messagename[gettext1-1], username[go2])==0){
+			printf("===============================================\n");
+			printf("%s\n%s\n",username[go2],text[gettext1-1]);
+			break;
+			}
 		}
-		int j=0;
-		while(1){
-			int tmpdep=0;
-			j=m[j].next;
-			if(m1[i]<m[j].height){
-				tmpdep=m[j].dep+1;
-				cout<<m1[i]<<" can follow "<<m[j].height<<" Dep= "<<tmpdep<<endl;
-				int n=0;
-				while(1){
-					n=m[n].next;
-					if(m[n].dep<=tmpdep){
-						m[n].next=k;
-						m[k].next=m[n].next;
-						m[k].dep=tmpdep;
-						k++;
+	}		
+	printf("===============================================\n");
+	printf("请选择想要打开的聊天框(//new新建聊天)");
+	scanf("%s",openname);
+	if(strcmp(openname, new) == 0){
+		writemessage(name);
+	}else{
+		for(gettext=0;gettext<=10000;gettext++){
+	
+			
+				if (strcmp(to[gettext], name) == 0 && strcmp(messagename[gettext], openname) == 0 || strcmp(to[gettext], openname) == 0 && strcmp(messagename[gettext], name) == 0){
+					printf("%s\n",messagename[gettext]);
+					printf("%s\n",text[gettext]);
+				}
+		}
+		for(gettext=0;gettext<=1000;gettext++){	
+			if((file = fopen("messagedata.dat","rb+")) == NULL){
+				printf("505 Notfound ErrorCode:712\n");
+			}
+			else{	
+					printf("快捷回复给%s",openname);
+					scanf("%s" ,text2);
+					if(strcmp(text2, exit) == 0){
+						break;
+					}if(strcmp(text2, ref) == 0){
+						readmessage2(name,openname);
+					}else if(strcmp(text2, exit) != 0){
+						fseek(file, 0L,SEEK_END);
+						time(&t);
+						local = localtime(&t);
+						fprintf(file,"%s ",name );
+						fprintf(file,"%s ",openname );			
+						fprintf(file,"%d年%d月%d日%d时%d分%d秒",local->tm_year + 1900, local->tm_mon + 1, local->tm_mday, local->tm_hour, local->tm_min, local->tm_sec);		
+						fprintf(file,"“%s”\n",text2);
+						fseek(file, 0L, SEEK_SET);
+						for(gettext1=0;gettext1<=10000;gettext1++){
+							fscanf(file,"%s",messagename1[gettext1]);
+							//printf("messagename1 %s ",messagename1[gettext1]);
+							fscanf(file,"%s",to1[gettext1]);
+							//printf("to1 %s\n",to1[gettext1]);
+							if(strcmp(to1[gettext1], end) == 0){
+								printf("读取信息完毕\n");
+								break;
+							}	
+							fscanf(file,"%s",text1[gettext1]);
+							if (strcmp(to1[gettext1], name) == 0 && strcmp(messagename1[gettext1], openname) == 0 || strcmp(to1[gettext1], openname) == 0 && strcmp(messagename1[gettext1], name) == 0){
+								printf("%s",messagename1[gettext1]);
+								printf("%s\n",text1[gettext1]);
+							}
+							
+						}
+					}
+				fclose(file);
+			}	
+		}
+	}
+	
+}
+	
+void writedairy(char name[64])
+{
+	char text[100][200];
+	char allname[500][64];
+	int signup=0; //判断是否要写入昵称
+	char nolook[1000][64]; //这条日记不让谁看
+	char dairyname[100][64];
+	int chose=0;
+	int go; 
+	int gettext;
+	int ok;
+	int code[500];
+	int code1;
+	int in;
+	char username[1000][64];
+	char end[]="//over";
+	time_t	t; 
+	FILE *file;
+	FILE *user;
+	struct tm  *local;
+	
+	time(&t);
+	local = localtime(&t);
+	
+	printf("您想要写什么？(200字以内)");
+	scanf("%s",text);
+	
+
+		if((file = fopen("journal.dat","a+")) == NULL){
+			printf("505 Notfound ErrorCode:703\n");
+		}
+		else{	
+			printf("是否设置不让谁看？1-是 2-不是");
+			scanf("%d",&chose);
+		if(chose==1){
+			for(go=0;go<=1000;go++){
+				printf("不让谁看？(//over输入完成)");
+				scanf("%s",nolook[go]);
+				if(strcmp(nolook[go], end) == 0){
+					break;
+				}else{
+					fprintf(file,"%s",nolook[go]);
+				}
+			}
+			fprintf(file," ");
+		}else if(chose==2){
+			fprintf(file,"nobody ");
+		}
+			
+			fprintf(file,"%s 在%d年%d月%d日%d时%d分%d秒时说",name,local->tm_year + 1900, local->tm_mon + 1, local->tm_mday, local->tm_hour, local->tm_min, local->tm_sec);		
+			fprintf(file,"“%s”\n",text);
+			printf("写日志成功\n");
+			fclose(file);
+			}
+}
+
+void readdairy(char name[64])
+{
+	char text[100][200];
+	int go2;
+	char allname[500][64];
+	int signup=0; //判断是否要写入昵称
+	char nolook[100][64]; //这条日记不让谁看
+	char dairyname[100][64];
+	int readname;
+	int chose=0;
+	int go;
+	int gettext;
+	int ok;
+	int code[500];
+	int code1;
+	int in;
+	char end[]="\0";
+	char new[]="//new";
+	char *p;
+	time_t	t; 
+	FILE *file;
+	FILE *user;
+	struct tm  *local;
+	
+	/*工程代码
+	if((file = fopen("messagedata.dat","r")) == NULL){
+			printf("505 Notfound ErrorCode:702\n");
+	}
+	else{	
+		for(gettext=0;gettext<=10000;gettext++){
+			ok=0;
+			fscanf(file,"%s",nolook[gettext]);
+			fscanf(file,"%s",dairyname[gettext]);
+			fscanf(file,"%s",text[gettext]);
+			if(strcmp(to[gettext1], end) == 0){
+				printf("读取信息完毕\n");
+				break;
+			}
+		}
+		
+		fclose(file);
+	}
+	
+	for(go=0;go<=10000;go++){
+		if(strcmp(nolook[go], name) != 0){
+		sure=0;
+			for(in=0;in<=10000;in++){
+				
+				if(*username[in]=='\0' && dairyname[go]=='\0'){
+					break;
+				}
+				if(strcmp(username[in], dairy[go]) == 0){
+					
+					sure=2;
+					break;
+				}				
+				
+			}
+			if(sure==0){
+				ok++;
+				stpcpy(username[ok], dairy[go]);
+			}	
+		}
+	}	
+	for(go=0;go<=gettext;go++){
+		go2++;			
+		for(gettext1=gettext;gettext1>=0;gettext1--){
+			
+			if(strcmp(name, nolook[gettext1-1])!=0 && strcmp(diaryname[gettext1-1], username[go2])==0){
+			printf("===============================================\n");
+			printf("%s\n%s\n",username[go2],text[gettext1-1]);
+			break;
+			}
+		}
+	}		
+	printf("===============================================\n");
+	*/
+	printf("1-时间线 2-写日志");
+	scanf("%d",&readname);
+	
+	if(readname==2){
+		writedairy(name);
+	}else{
+		if((file = fopen("journal.dat","r")) == NULL){
+				printf("505 Notfound ErrorCode:704\n");
+		}
+		else{	
+			for(gettext=0;gettext<=1500;gettext++){
+				ok=0;
+				fscanf(file,"%s",nolook[gettext]);
+				fscanf(file,"%s",dairyname[gettext]);
+				fscanf(file,"%s",text[gettext]);
+				if(strcmp(text[gettext], end) == 0){
+					printf("——没有更多日志——\n");
+					break;
+				}
+				p=strstr(nolook[gettext],name);
+				if (p){
+
+				}else{
+					printf("%s",dairyname[gettext]);
+					printf("%s\n",text[gettext]);
+				}
+			
+			}
+	
+			fclose(file);
+		}
+
+	}
+}
+void public(char name[64])
+{
+	char text[10000][200];
+	char text1[10000][200];
+	char text2[200];
+	char allname[10000][64];
+	char to[10000][64]; 
+	char to1[10000][64]; 
+	char messagename[10000][64];
+	char messagename1[10000][64];
+	char username[10000][64];
+	char openname[64];
+	char exit[64]="//fullexit";
+	char end[]="\0";
+	int chose=0;
+	int go=0;
+	int gettext=0;
+	int gettext1=0;
+	int ok=0;
+	int go2=0;
+	int code[500];
+	int code1=0;
+	int in=0;
+	int sure=0;
+	char new[]="//new";
+	char ref[]="//refresh";
+	time_t	t; 
+	FILE *file;
+	FILE *user;
+	struct tm  *local;
+	
+	time(&t);
+	local = localtime(&t);
+	for(gettext=0;gettext<=100000000;gettext++){	
+		if((file = fopen("public.dat","rb+")) == NULL){
+			printf("505 Notfound ErrorCode:712\n");
+		}
+		else{	
+			printf("发送消息");
+			scanf("%s" ,text2);
+			if(strcmp(text2, exit) == 0){
+				break;
+			}if(strcmp(text2, ref) == 0){
+				public2();
+			}else if(strcmp(text2, exit) != 0){
+				fseek(file, 0L,SEEK_END);
+				time(&t);
+				local = localtime(&t);
+				fprintf(file,"%s ",name );		
+				fprintf(file,"%d年%d月%d日%d时%d分%d秒",local->tm_year + 1900, local->tm_mon + 1, local->tm_mday, local->tm_hour, local->tm_min, local->tm_sec);		
+				fprintf(file,"“%s”\n",text2);
+				fseek(file, 0L, SEEK_SET);
+				for(gettext1=0;gettext1<=100000;gettext1++){
+					fscanf(file,"%s",messagename1[gettext1]);
+					fscanf(file,"%s",text1[gettext1]);
+					if(strcmp(text1[gettext1], end) == 0){
+						printf("读取信息完毕\n");
+						break;
+					}	
+					printf("%s\n",messagename1[gettext1]);
+					printf("%s\n",text1[gettext1]);
+					
+				}
+			}
+			fclose(file);
+		}	
+		
+	}
+}
+void userdata()
+{
+	char name[1000][64];
+	int gettext;
+	char end[]="\0";
+	FILE *file;
+	
+	if((file = fopen("userdata.dat","r")) == NULL){
+				printf("505 Notfound ErrorCode:731\n");
+		}
+		else{	
+			for(gettext=0;gettext<=1500;gettext++){
+				fscanf(file,"%s",name[gettext]);
+				if(strcmp(name[gettext], end) == 0){
+					printf("——没有更多用户——\n");
+					break;
+				}
+
+				printf("%s\n",name[gettext]);
+			
+			}
+	
+			fclose(file);
+		}
+}
+int main(void){
+
+	char allname[500][64];
+	char name[64];
+	char name1[64];
+	int signup=0; 
+	int chose=0;
+	int go;
+	int ok;
+	char code[500][64];
+	char code1[64];
+	int in;
+	char admin[] = "admin";
+	int connect=0;
+	int connect2=0;;
+	time_t	t; 
+	FILE *file;
+	FILE *user;
+	struct tm  *local;
+	
+	time(&t);
+	local = localtime(&t);
+	if((user = fopen("userdata.dat","r")) == NULL){
+		printf("服务器连接异常，请确认连接后重试");
+	}
+	else{
+		for(go=0;go<=1500;go++){
+			ok=0;
+			fscanf(user,"%d",&ok);
+			fscanf(user,"%s",allname[go]);
+			fscanf(user,"%s",&code[go]);
+
+			if(ok!=6){
+				break;
+			}
+			
+		}
+		fclose(user);
+	}
+	if((user = fopen("connect.dat","r")) == NULL){
+		printf("服务器连接异常，请确认连接后重试");
+		connect=1;
+	}
+	else{
+		
+	}
+	if(connect!=1){
+		printf("欢迎\n");
+		do{
+		in=2;
+		printf("1-登陆 2-注册");
+		scanf("%d",&signup);
+		if(signup==1){
+			printf("账号：");
+			scanf("%s",name1);
+			printf("密码：");
+			scanf("%s",code1);
+			for(go=0;go<=500;go++){
+				if (strcmp(allname[go], name1) == 0 && strcmp(code[go], code1) == 0){
+						stpcpy(name, name1);
+						printf("登陆成功，欢迎你%s\n",name);
+						in=0;
 						break;
 					}
+				if(go==500){
+					printf("登录失败请重试\n");
+					break;
 				}
+			
 			}
-			break;
 		}
-	}*/
-	cout<<endl<<m[head].dep<<endl;
-	int inted=0;
-	int sysneed=0;
-	while(inted<num){
-		//cout<<"System needed ="<<sysneed<<endl;
-		sysneed++;
-		int last=0;
-		while(1){
-			int tmptop=0;
-			int j;
-			for(j=last;j<num;j++){
-				if(m1[j]>tmptop){
-					tmptop=m1[j];
-					last=j;
+	
+		else if(signup==2){
+			printf("首次使用，请注册\n");
+			printf("昵称：");
+			scanf("%s",name);
+			printf("密码:");
+			scanf("%s",code1);
+			for(go=0;go<=500;go++){
+				if (strcmp(allname[go], name) == 0){
+						printf("昵称已被其他用户占用，请重试\n");
+						break;
+					}
+				if(go==500){
+					in=0;
+					break;
 				}
+			
 			}
-			if(m1[last]==-1){
-				break;
-			}else{
-				m1[last]=-1;
-				//cout<<"Intercepted missle "<<last<<endl;
-				inted++;
+			if(in==0){
+			if((user = fopen("userdata.dat","a+")) == NULL){
+			printf("无法读取\n");
 			}
-		}
-	}
-	cout<<sysneed<<endl;
-}
-int m[401],top;
-int judge(void)
-{
-    for (int i=0;i<top/2;i++){
-		if (m[i]!=m[top-i-1])
-            return 0;
-	}
-    return 1;
-}
-int tractsnumber(void)
-{
-	int n;
-	char s[101];
-	cin>>n>>s;
-	top=strlen(s);
-	for (int i=0;i<top;i++){
-		if(s[i]>='0'&&s[i]<='9')
-			m[top-i-1]=s[i]-'0';
-		else
-			m[top-i-1]=s[i]-'A'+10;
-	}
-	int step;
-	for(step=0;;step++){
-		if (step>30){
-			cout<<"Impossible!"<<endl;
-            return 0;
-		}
-		int tmp[101];
-		for(int i=0;i<top;i++)
-			tmp[i]=m[i];
-        for (int i=0;i<top;i++){
-			m[i]+=tmp[top-i-1];
-		}
-        for (int i=0;i<top;i++){
-            if (m[i]>=n){
-                m[i+1]+=1;
-				m[i]%=n;
-				if(i==top-1)
-					top++;
+			else{
+				fprintf(user,"6 ");			
+				fprintf(user,"%s ",name);
+				fprintf(user,"%s\n",code1);
+				fclose(user);
+				printf("注册成功\n");
+				in=0;
 			}
+			}
+		}	
+		}while(in==2);
+		if(strcmp(name, admin) == 0){
+			printf("admin，您已成功登陆管理员账号。\n");
+			do{
+			printf("日志-1 信息-2 大厅-3 数据管理-4 用户管理-5");
+			scanf("%d",&chose);
+			if(chose==1){
+				readdairy(name);
+			}else if(chose==2){
+				readmessage(name);
+			}else if(chose==3){
+				public(name);
+			}else if(chose==4){
+				cleandata(name);
+			}else if(chose==5){
+				printf("开发中");
+			}
+			}while(1);
+		}else{
+			do{
+			printf("日志-1 信息-2 大厅-3 用户列表-4");
+			scanf("%d",&chose);
+			if(chose==1){
+				readdairy(name);
+			}else if(chose==2){
+				readmessage(name);
+			}else if(chose==3){
+				public(name);
+			}else if(chose==4){
+				userdata();
+			}
+			}while(1);
 		}
-		if(judge()==1)
-			break;
-    }
-    cout<<"STEP="<<step+1<<endl;
-    return 0;
-}
-struct missle2
-{
-	int x;
-	int y;
-};
-void interceptor_missile2(void)
-{
-	int x1,y1,x2,y2;
-	cin>>x1>>y1>>x2>>y2;
-	int n;
-	cin>>n;
-	struct missle2 m[100000];
-	for(int i=0;i<n;i++){
-		cin>>m[i].x>>m[i].y;
 	}
-	int l1=0,l2=0;
-	int ml1,ml2;
-	int tmp1,tmp2;
-	for(int i=0;i<n;i++){
-		tmp1=(m[i].x-x1)*(m[i].x-x1)+(m[i].y-y1)*(m[i].y-y1);
-		tmp2=(m[i].x-x2)*(m[i].x-x2)+(m[i].y-y2)*(m[i].y-y2);
-		if(tmp1>ml1&&tmp2>ml2){
-			if(ml1-tmp1>=ml2-tmp2)
-				ml1=tmp1;
-			else
-				ml2=tmp2;
-		}
-	}
-	cout<<ml1*ml1+ml2*ml2<<endl;
-}
-int main()
-{
-	interceptor_missile(); 
-	return 0;
+	return(0);
 }
