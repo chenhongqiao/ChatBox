@@ -1,1 +1,1 @@
-A social media app using files to share data.
+A social media app using files to exchange information.
