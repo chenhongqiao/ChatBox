@@ -11,13 +11,13 @@ AM_CFLAGS =\
 	 -Wall\
 	 -g
 
-bin_PROGRAMS = noip
+bin_PROGRAMS = chatbox
 
-noip_SOURCES = \
+chatbox_SOURCES = \
 	main.cc
 
-noip_LDFLAGS = 
+chatbox_LDFLAGS = 
 
-noip_LDADD = 
+chatbox_LDADD = 
 
 
